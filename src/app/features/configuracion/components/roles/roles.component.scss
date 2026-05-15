@@ -6,14 +6,12 @@
 }
 
 .page-title {
-  font-family: sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   font-weight: 800;
-  font-style: normal;
   font-size: 2.25rem;
   line-height: 2.5rem;
   letter-spacing: normal;
   text-align: left;
-  vertical-align: middle;
   color: #163572;
   margin: 0 0 1.5rem;
 }
@@ -80,27 +78,45 @@
 .config-table { width: 100%; }
 
 .mat-mdc-header-cell {
-  font-weight: 800 !important;
+  font-family: 'Segoe UI', sans-serif !important;
+  font-weight: 700 !important;
   color: #0f172a !important;
   font-size: 0.82rem !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   background: #fff !important;
   border-bottom: 1px solid #e2e8f0 !important;
-  padding: 1rem !important;
+  padding: 1rem 1rem 1rem 16px !important;
 }
 
 .mat-mdc-cell {
-  font-weight: 700;
-  color: #1e293b;
-  font-size: 0.875rem;
-  padding: 1rem !important;
+  font-family: 'Segoe UI', sans-serif !important;
+  font-weight: 400 !important;
+  color: #1e293b !important;
+  font-size: 0.875rem !important;
+  padding: 1rem 1rem 1rem 16px !important;
   border-bottom: 1px solid #f1f5f9 !important;
+  vertical-align: middle !important;
+  text-align: left !important;
 }
 
 .table-row {
   transition: background 0.15s;
   &:hover { background: #f8fafc; }
+}
+
+/* Columna ROL destacada */
+.mat-column-nombre {
+  font-weight: 400 !important;
+  color: #1e293b !important;
+  width: 160px !important;
+  white-space: nowrap !important;
+}
+
+/* Columna ACCIONES centrada */
+.mat-column-acciones {
+  text-align: center !important;
+  width: 80px !important;
 }
 
 /* Paginator */
@@ -122,22 +138,4 @@
   display: flex;
   justify-content: center;
   padding: 4rem;
-}
-/* Textos generales extrabold */
-.stat-label,
-.stat-num,
-.paginator-info,
-.mes-label {
-  font-family: sans-serif;
-  font-weight: 800;
-}
-
-.mat-mdc-header-cell {
-  font-family: sans-serif !important;
-  font-weight: 800 !important;
-}
-
-.mat-mdc-cell {
-  font-family: sans-serif !important;
-  font-weight: 800 !important;
 }
