@@ -57,8 +57,44 @@
 }
 
 .search-field {
-  width: 320px;
-  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
+  width: 320px !important;
+  height: 40px !important;
+
+  ::ng-deep {
+    .mat-mdc-form-field-subscript-wrapper { display: none; }
+
+    .mat-mdc-text-field-wrapper {
+      border-radius: 15px !important;
+      border: 1px solid #E5E5E5 !important;
+      background: #fff !important;
+      padding: 6px 12px !important;
+      height: 40px !important;
+    }
+
+    .mat-mdc-form-field-flex {
+      height: 40px !important;
+      align-items: center !important;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+      min-height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    input.mat-mdc-input-element {
+      font-family: 'Segoe UI', sans-serif !important;
+      font-size: 0.875rem !important;
+      color: #737373 !important;
+    }
+
+    .mat-icon {
+      color: #737373 !important;
+      font-size: 20px !important;
+    }
+  }
 }
 
 .btn-nuevo {
@@ -70,16 +106,17 @@
 
 /* Tabla */
 .table-card {
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  border: 1px solid #E5E5E5;
+  border-radius: 15px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.10);
 }
 
 .config-table { width: 100%; }
 
 .mat-mdc-header-cell {
   font-family: 'Segoe UI', sans-serif !important;
-  font-weight: 700 !important;
+  font-weight: 400 !important;
   color: #0f172a !important;
   font-size: 0.82rem !important;
   text-transform: uppercase;
@@ -94,7 +131,7 @@
   font-weight: 400 !important;
   color: #1e293b !important;
   font-size: 0.875rem !important;
-  padding: 1rem 1rem 1rem 16px !important;
+  padding: 0.75rem 1rem 0.75rem 16px !important;
   border-bottom: 1px solid #f1f5f9 !important;
   vertical-align: middle !important;
   text-align: left !important;
@@ -105,7 +142,7 @@
   &:hover { background: #f8fafc; }
 }
 
-/* Columna ROL destacada */
+/* Columna ROL */
 .mat-column-nombre {
   font-weight: 400 !important;
   color: #1e293b !important;
@@ -119,6 +156,13 @@
   width: 80px !important;
 }
 
+/* Columnas descripcion y modulos */
+.mat-column-descripcion,
+.mat-column-modulos {
+  font-weight: 400 !important;
+  color: #1e293b !important;
+}
+
 /* Paginator */
 .paginator-row {
   display: flex;
@@ -129,9 +173,12 @@
 }
 
 .paginator-info {
-  font-size: 0.82rem;
+  font-family: 'Segoe UI', sans-serif !important;
+  font-size: 0.82rem !important;
+  font-weight: 400 !important;
   color: #64748b;
-  font-weight: 500;
+  line-height: 1.5 !important;
+  letter-spacing: normal !important;
 }
 
 .loading-wrap {
