@@ -1,0 +1,98 @@
+<div class="config-page">
+
+  <h2 class="page-title">Usuarios</h2>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <mat-icon>group</mat-icon>
+      <span class="stat-num">{{ totalActivos }}</span>
+      <span class="stat-label">Activos</span>
+    </div>
+    <div class="stat-card">
+      <mat-icon>person_off</mat-icon>
+      <span class="stat-num">{{ totalInactivos }}</span>
+      <span class="stat-label">Inactivos</span>
+    </div>
+    <div class="stat-card">
+      <mat-icon>people</mat-icon>
+      <span class="stat-num">{{ dataSource.data.length }}</span>
+      <span class="stat-label">Total</span>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput placeholder="Buscar por nombre o usuario..." (input)="applyFilter($event)" />
+    </mat-form-field>
+    <button mat-flat-button color="primary" class="btn-nuevo" (click)="abrirDialog()">
+      <mat-icon>person_add</mat-icon> Nuevo Usuario
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-wrap" *ngIf="loading">
+    <mat-spinner diameter="36"></mat-spinner>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-card" *ngIf="!loading">
+    <table mat-table [dataSource]="dataSource" class="config-table">
+
+      <ng-container matColumnDef="nombres">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let u">
+          <div class="user-cell">
+            <div class="avatar"
+                 [style.background]="avatarBg(u.nombres)"
+                 [style.color]="avatarColor(u.nombres)">
+              {{ getInitials(u.nombres) }}
+            </div>
+            <div class="user-info">
+              <span class="user-name">{{ u.nombres }}</span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef>Usuario</th>
+        <td mat-cell *matCellDef="let u">{{ u.usuario }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let u">
+          <span class="estado-badge" [class.activo]="u.estado === 'Activo'" [class.inactivo]="u.estado !== 'Activo'">
+            {{ u.estado }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef>Roles</th>
+        <td mat-cell *matCellDef="let u">{{ u.roles.join(', ') }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let u">
+          <button mat-icon-button (click)="abrirDialog(u)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+    </table>
+
+    <div class="paginator-row">
+      <span class="paginator-info">Mostrando {{ dataSource.filteredData.length }} registros</span>
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+
+</div>

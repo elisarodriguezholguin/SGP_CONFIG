@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ data ? 'Editar Feriado' : 'Nuevo Feriado' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre del feriado</mat-label>
+      <input matInput formControlName="nombre" placeholder="Ej: Año Nuevo" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Fecha</mat-label>
+      <input matInput type="date" formControlName="fecha" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="tipo">
+        <mat-option value="NACIONAL">Nacional</mat-option>
+        <mat-option value="RELIGIOSO">Religioso</mat-option>
+        <mat-option value="LOCAL">Local</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="guardar()">
+    Guardar
+  </button>
+</mat-dialog-actions>

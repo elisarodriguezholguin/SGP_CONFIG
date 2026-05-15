@@ -1,0 +1,82 @@
+<div class="config-page">
+
+  <h2 class="page-title">Días Festivos</h2>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <mat-icon>event</mat-icon>
+      <span class="stat-num">{{ feriadosFiltrados.length }}</span>
+      <span class="stat-label">Feriados {{ anio }}</span>
+    </div>
+    <div class="stat-card">
+      <mat-icon>flag</mat-icon>
+      <span class="stat-num">{{ contarTipo('NACIONAL') }}</span>
+      <span class="stat-label">Nacionales</span>
+    </div>
+    <div class="stat-card">
+      <mat-icon>church</mat-icon>
+      <span class="stat-num">{{ contarTipo('RELIGIOSO') }}</span>
+      <span class="stat-label">Religiosos</span>
+    </div>
+    <div class="stat-card">
+      <mat-icon>location_city</mat-icon>
+      <span class="stat-num">{{ contarTipo('LOCAL') }}</span>
+      <span class="stat-label">Locales</span>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <button mat-icon-button (click)="cambiarMes(-1)" matTooltip="Mes anterior">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button mat-stroked-button class="btn-today" (click)="irHoy()">Hoy</button>
+      <button mat-icon-button (click)="cambiarMes(1)" matTooltip="Mes siguiente">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <span class="mes-label">{{ meses[mesActual] }} de {{ anio }}</span>
+    </div>
+    <button mat-flat-button color="primary" class="btn-nuevo" (click)="abrirDialog()">
+      <mat-icon>add</mat-icon> Agregar Feriado
+    </button>
+  </div>
+
+  <!-- Calendario grande -->
+  <div class="cal-card">
+    <!-- Cabecera días semana -->
+    <div class="cal-header">
+      <div *ngFor="let d of diasSemana" class="cal-header-cell">{{ d }}</div>
+    </div>
+
+    <!-- Grid de días -->
+    <div class="cal-grid">
+      <div *ngFor="let celda of celdasCalendario"
+           class="cal-cell"
+           [class.otro-mes]="!celda.esEsteMes"
+           [class.hoy]="celda.esHoy">
+        <span class="cal-num">{{ celda.dia }}</span>
+        <div class="cal-eventos">
+          <div *ngFor="let f of celda.feriados"
+               class="cal-evento"
+               [class.ev-nacional]="f.tipo === 'NACIONAL'"
+               [class.ev-religioso]="f.tipo === 'RELIGIOSO'"
+               [class.ev-local]="f.tipo === 'LOCAL'"
+               [matTooltip]="f.tipo"
+               matTooltipPosition="above">
+            {{ f.nombre }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leyenda -->
+  <div class="leyenda">
+    <span class="ley-item"><span class="ley-dot nacional"></span> Nacional</span>
+    <span class="ley-item"><span class="ley-dot religioso"></span> Religioso</span>
+    <span class="ley-item"><span class="ley-dot local"></span> Local</span>
+  </div>
+
+</div>
