@@ -63,17 +63,30 @@ import { MatIconModule } from '@angular/material/icon';
       </mat-dialog-actions>
     </div>
   `,
-  styles: [`
-    .dialog-container { padding: 8px; }
-    .dialog-header {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 16px;
-      mat-icon { color: #1D5FD9; font-size: 24px; }
-      h2 { margin: 0; font-size: 18px; font-weight: 500; }
-    }
-    .dialog-form { display: flex; flex-direction: column; gap: 4px; }
-    .full-width { width: 100%; }
-  `]
+ styles: [`
+  .dialog-container { padding: 8px; }
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .dialog-header mat-icon {
+    color: #163572;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+  }
+  .dialog-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #163572;
+  }
+  .dialog-form { display: flex; flex-direction: column; gap: 4px; }
+  .full-width { width: 100%; }
+`]
 })
 export class RolDialogComponent implements OnInit {
   form!: FormGroup;

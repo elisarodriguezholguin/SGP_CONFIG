@@ -4,13 +4,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RolDialogComponent } from '../../dialogs/rol-dialog/rol-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface Rol {
   id: number;
@@ -27,13 +27,13 @@ export interface Rol {
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatIconModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './roles.component.html',
   styleUrls: ['./roles.component.scss'],
@@ -66,6 +66,9 @@ export class RolesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.paginator.page.subscribe(() => {
+      this.currentPage = this.paginator.pageIndex + 1;
+    });
   }
 
   applyFilter(event: Event): void {
@@ -73,14 +76,38 @@ export class RolesComponent implements OnInit, AfterViewInit {
   }
 
   abrirDialog(rol?: Rol): void {
-    const ref = this.dialog.open(RolDialogComponent, {
-      width: '520px',
-      data: rol ? { ...rol } : null,
-    });
-    ref.afterClosed().subscribe((result) => {
-      if (result) this.snackBar.open('Rol guardado correctamente', 'OK', { duration: 2500 });
-    });
-  }
+  const ref = this.dialog.open(RolDialogComponent, {
+    width: '520px',
+    data: rol ? { ...rol } : null,
+  });
+  ref.afterClosed().subscribe((result) => {
+    if (result) {
+      if (rol) {
+        // Editar rol existente
+        const idx = this.rolesData.findIndex(r => r.id === rol.id);
+        if (idx !== -1) {
+          this.rolesData[idx] = { ...rol, ...result };
+        }
+      } else {
+        // Agregar nuevo rol
+        const nuevoRol: Rol = {
+          id: this.rolesData.length + 1,
+          nombre: result.nombre,
+          descripcion: result.descripcion,
+          modulos: result.modulos,
+        };
+        this.rolesData.push(nuevoRol);
+      }
+      // Actualizar tabla
+      this.dataSource.data = [...this.rolesData];
+      this.snackBar.open(
+        rol ? 'Rol actualizado correctamente' : 'Rol agregado correctamente',
+        'OK',
+        { duration: 2500 }
+      );
+    }
+  });
+}
 
   get totalRoles(): number { return this.dataSource.data.length; }
   
@@ -99,5 +126,35 @@ export class RolesComponent implements OnInit, AfterViewInit {
   chipColor(index: number): string {
     const colors = ['chip-blue','chip-green','chip-amber','chip-pink','chip-teal'];
     return colors[index % colors.length];
+  }
+  pageSize = 10;
+  currentPage = 1;
+
+  get totalPages(): number {
+    return Math.ceil(this.dataSource.filteredData.length / this.pageSize) || 1;
+  }
+
+  goFirst(): void {
+    this.currentPage = 1;
+    this.dataSource.paginator!.firstPage();
+  }
+
+  goPrev(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.dataSource.paginator!.previousPage();
+    }
+  }
+
+  goNext(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.dataSource.paginator!.nextPage();
+    }
+  }
+
+  goLast(): void {
+    this.currentPage = this.totalPages;
+    this.dataSource.paginator!.lastPage();
   }
 }
