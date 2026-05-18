@@ -1,1 +1,44 @@
-<p>usuario-dialog works!</p>
+<h2 mat-dialog-title class="dialog-title">
+  {{ esEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombres completos</mat-label>
+      <input matInput formControlName="nombres" placeholder="Ej: Juan Pérez" />
+      <mat-error *ngIf="form.get('nombres')?.hasError('required')">Campo requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correo / Usuario</mat-label>
+      <input matInput formControlName="usuario" placeholder="correo@empresa.com" />
+      <mat-error *ngIf="form.get('usuario')?.hasError('required')">Campo requerido</mat-error>
+      <mat-error *ngIf="form.get('usuario')?.hasError('email')">Correo inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option *ngFor="let e of estadosDisponibles" [value]="e">{{ e }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Roles</mat-label>
+      <mat-select formControlName="roles" multiple>
+        <mat-option *ngFor="let r of rolesDisponibles" [value]="r">{{ r }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('roles')?.hasError('required')">Selecciona al menos un rol</mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()" [disabled]="form.invalid">
+    {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

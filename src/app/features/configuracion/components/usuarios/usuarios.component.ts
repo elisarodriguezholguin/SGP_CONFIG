@@ -43,6 +43,8 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   displayedColumns = ['nombres', 'usuario', 'estado', 'roles', 'acciones'];
   dataSource = new MatTableDataSource<Usuario>([]);
   loading = false;
+  pageSize = 10;
+  currentPage = 1;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -59,19 +61,23 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.loading = true;
-    setTimeout(() => {
-      this.dataSource.data = this.usuariosData;
-      this.loading = false;
-    }, 500);
+    this.dataSource.data = this.usuariosData;
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+        this.paginator.page.subscribe(() => {
+          this.currentPage = this.paginator.pageIndex + 1;
+        });
+      }
+    });
   }
 
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.currentPage = 1;
   }
 
   abrirDialog(usuario?: Usuario): void {
@@ -80,8 +86,28 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
       data: usuario ? { ...usuario } : null,
     });
     ref.afterClosed().subscribe((result) => {
-      if (result) this.snackBar.open('Usuario guardado correctamente', 'OK', { duration: 2500 });
+      if (result) {
+        if (usuario) {
+          const idx = this.dataSource.data.findIndex(u => u.id === usuario.id);
+          if (idx > -1) {
+            const updated = [...this.dataSource.data];
+            updated[idx] = { ...usuario, ...result };
+            this.dataSource.data = updated;
+          }
+        } else {
+          const nuevo: Usuario = { id: this.dataSource.data.length + 1, ...result };
+          this.dataSource.data = [...this.dataSource.data, nuevo];
+        }
+        this.snackBar.open(usuario ? 'Usuario actualizado' : 'Usuario creado', 'OK', { duration: 2500 });
+      }
     });
+  }
+
+  eliminar(usuario: Usuario): void {
+    if (confirm(`¿Eliminar a ${usuario.nombres}?`)) {
+      this.dataSource.data = this.dataSource.data.filter(u => u.id !== usuario.id);
+      this.snackBar.open('Usuario eliminado', 'OK', { duration: 2500 });
+    }
   }
 
   getInitials(nombres: string): string {
@@ -100,4 +126,13 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
 
   get totalActivos(): number { return this.dataSource.data.filter((u) => u.estado === 'Activo').length; }
   get totalInactivos(): number { return this.dataSource.data.filter((u) => u.estado === 'Inactivo').length; }
+
+  get totalPages(): number {
+    return Math.ceil(this.dataSource.filteredData.length / this.pageSize) || 1;
+  }
+
+  goFirst(): void { this.currentPage = 1; this.paginator.firstPage(); }
+  goPrev(): void { if (this.currentPage > 1) { this.currentPage--; this.paginator.previousPage(); } }
+  goNext(): void { if (this.currentPage < this.totalPages) { this.currentPage++; this.paginator.nextPage(); } }
+  goLast(): void { this.currentPage = this.totalPages; this.paginator.lastPage(); }
 }

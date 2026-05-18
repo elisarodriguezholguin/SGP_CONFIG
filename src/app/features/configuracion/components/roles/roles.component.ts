@@ -64,18 +64,22 @@ export class RolesComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.paginator.page.subscribe(() => {
-      this.currentPage = this.paginator.pageIndex + 1;
-    });
-  }
+ ngAfterViewInit(): void {
+  setTimeout(() => {
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+      this.paginator.page.subscribe(() => {
+        this.currentPage = this.paginator.pageIndex + 1;
+      });
+    }
+  });
+}
 
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
-  abrirDialog(rol?: Rol): void {
+abrirDialog(rol?: Rol): void {
   const ref = this.dialog.open(RolDialogComponent, {
     width: '520px',
     data: rol ? { ...rol } : null,
@@ -83,27 +87,24 @@ export class RolesComponent implements OnInit, AfterViewInit {
   ref.afterClosed().subscribe((result) => {
     if (result) {
       if (rol) {
-        // Editar rol existente
-        const idx = this.rolesData.findIndex(r => r.id === rol.id);
-        if (idx !== -1) {
-          this.rolesData[idx] = { ...rol, ...result };
+        // Editar
+        const idx = this.dataSource.data.findIndex(r => r.id === rol.id);
+        if (idx > -1) {
+          const updated = [...this.dataSource.data];
+          updated[idx] = { ...rol, ...result };
+          this.dataSource.data = updated;
         }
       } else {
-        // Agregar nuevo rol
-        const nuevoRol: Rol = {
-          id: this.rolesData.length + 1,
-          nombre: result.nombre,
-          descripcion: result.descripcion,
-          modulos: result.modulos,
+        // Agregar nuevo
+        const nuevo: Rol = {
+          id: this.dataSource.data.length + 1,
+          ...result
         };
-        this.rolesData.push(nuevoRol);
+        this.dataSource.data = [...this.dataSource.data, nuevo];
       }
-      // Actualizar tabla
-      this.dataSource.data = [...this.rolesData];
       this.snackBar.open(
-        rol ? 'Rol actualizado correctamente' : 'Rol agregado correctamente',
-        'OK',
-        { duration: 2500 }
+        rol ? 'Rol actualizado' : 'Rol creado correctamente',
+        'OK', { duration: 2500 }
       );
     }
   });

@@ -1,0 +1,42 @@
+* { font-family: 'Inter', sans-serif !important; }
+
+h2[mat-dialog-title] {
+  font-size: 17px;
+  font-weight: 700;
+  color: #163572;
+  margin: 0 0 8px 0;
+  padding: 16px 24px 0;
+}
+
+mat-dialog-content {
+  padding: 8px 24px !important;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 460px;
+}
+
+.full-width { width: 100%; }
+
+mat-dialog-actions {
+  padding: 8px 24px 16px !important;
+  gap: 8px;
+
+  button[mat-button] {
+    color: #888 !important;
+    font-weight: 500;
+    &:hover { background: #f0f0f0 !important; }
+  }
+
+  button[mat-flat-button] {
+    background-color: #163572 !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 6px;
+    &:hover:not(:disabled) { background-color: #1e4a9a !important; }
+    &:disabled { background-color: #ccc !important; }
+  }
+}

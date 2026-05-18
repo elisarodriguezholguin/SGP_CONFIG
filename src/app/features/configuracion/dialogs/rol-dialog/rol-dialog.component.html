@@ -1,9 +1,9 @@
 <h2 mat-dialog-title class="dialog-title">
-  {{ data ? 'Editar Rol' : 'Nuevo Rol' }}
+  {{ esEdicion ? 'Editar Rol' : 'Nuevo Rol' }}
 </h2>
 
-<mat-dialog-content class="dialog-content">
-  <form [formGroup]="form">
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Nombre del rol</mat-label>
@@ -13,30 +13,25 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Descripción</mat-label>
-      <textarea matInput formControlName="descripcion" rows="2"
-                placeholder="Describe las responsabilidades del rol"></textarea>
+      <textarea matInput formControlName="descripcion" rows="3"
+        placeholder="Describe las responsabilidades del rol"></textarea>
       <mat-error *ngIf="form.get('descripcion')?.hasError('required')">Campo requerido</mat-error>
     </mat-form-field>
 
-    <div class="modulos-label">Módulos con acceso</div>
-    <div class="modulos-grid">
-      <div *ngFor="let mod of modulosDisponibles"
-           class="modulo-item"
-           [class.seleccionado]="estaSeleccionado(mod)"
-           (click)="toggleModulo(mod)">
-        <mat-icon class="mod-icon">{{ estaSeleccionado(mod) ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
-        <span>{{ mod }}</span>
-      </div>
-    </div>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Módulos</mat-label>
+      <mat-select formControlName="modulos" multiple>
+        <mat-option *ngFor="let m of modulosDisponibles" [value]="m">{{ m }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('modulos')?.hasError('required')">Selecciona al menos un módulo</mat-error>
+    </mat-form-field>
 
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-flat-button color="primary"
-          [disabled]="form.invalid"
-          (click)="guardar()">
-    {{ data ? 'Actualizar' : 'Guardar' }}
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()" [disabled]="form.invalid">
+    {{ esEdicion ? 'Actualizar' : 'Guardar' }}
   </button>
 </mat-dialog-actions>
