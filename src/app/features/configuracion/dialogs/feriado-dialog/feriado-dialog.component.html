@@ -1,33 +1,36 @@
-<h2 mat-dialog-title>{{ data ? 'Editar Feriado' : 'Nuevo Feriado' }}</h2>
+<h2 class="dialog-title">{{ data ? 'Editar Feriado' : 'Nuevo Feriado' }}</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Nombre del feriado</mat-label>
-      <input matInput formControlName="nombre" placeholder="Ej: Año Nuevo" />
-    </mat-form-field>
+    <div class="field-group">
+      <label class="field-label">Nombre del feriado <span class="required">*</span></label>
+      <input class="field-input" formControlName="nombre" placeholder="Ej: Año Nuevo" />
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Fecha</mat-label>
-      <input matInput type="date" formControlName="fecha" />
-    </mat-form-field>
+    <div class="field-group">
+      <label class="field-label">Fecha <span class="required">*</span></label>
+      <input class="field-input" type="date" formControlName="fecha" />
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Tipo</mat-label>
-      <mat-select formControlName="tipo">
-        <mat-option value="NACIONAL">Nacional</mat-option>
-        <mat-option value="RELIGIOSO">Religioso</mat-option>
-        <mat-option value="LOCAL">Local</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="field-group">
+      <label class="field-label">Tipo <span class="required">*</span></label>
+      <select class="field-input field-select" formControlName="tipo">
+        <option value="NACIONAL">Nacional</option>
+        <option value="RELIGIOSO">Religioso</option>
+        <option value="LOCAL">Local</option>
+      </select>
+    </div>
 
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="guardar()">
+  <button class="btn-action btn-cancel" mat-dialog-close>Cancelar</button>
+  <button class="btn-action btn-save" [disabled]="form.invalid" (click)="guardar()">
     Guardar
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
   </button>
 </mat-dialog-actions>
