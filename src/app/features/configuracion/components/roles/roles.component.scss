@@ -18,7 +18,11 @@ $gray:    #5F5E5A;
 }
 
 // Stats
-.stats-row { display: flex; gap: 12px; margin-bottom: 16px; }
+.stats-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
 
 .stat-card {
   display: flex;
@@ -39,7 +43,7 @@ $gray:    #5F5E5A;
 
 .stat-info {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
 }
 
@@ -102,7 +106,10 @@ $gray:    #5F5E5A;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  &:hover { background-color: #1e4a9a; }
+
+  &:hover {
+    background-color: #1e4a9a;
+  }
 }
 
 // Tabla
@@ -126,7 +133,10 @@ $gray:    #5F5E5A;
     border-bottom: 2px solid #d0d0d0;
     border-right: 1px solid #d5d5d5;
     padding: 11px 16px;
-    &:last-child { border-right: none; }
+
+    &:last-child {
+      border-right: none;
+    }
   }
 
   td.mat-mdc-cell {
@@ -137,27 +147,57 @@ $gray:    #5F5E5A;
     border-bottom: 1px solid #e0e0e0;
     border-right: 1px solid #e8e8e8;
     vertical-align: middle;
-    &:last-child { border-right: none; }
+
+    &:last-child {
+      border-right: none;
+    }
   }
 
-  // Hover muy suave
-  .table-row:hover td { background: #f7f8fc; }
-  .table-row:last-child td { border-bottom: none; }
+  .table-row:hover td {
+    background: #f7f8fc;
+  }
+
+  .table-row:last-child td {
+    border-bottom: none;
+  }
 }
 
-.edit-btn {
-  background: none;
-  border: none;
+// ===== ACCIONES (AQUÍ ESTÁ EL ARREGLO) =====
+.acciones-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.edit-btn,
+.delete-btn {
+  background: #fff;
+  border: 1px solid #dcdcdc;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+
   display: flex;
   align-items: center;
-  &:hover { background: #f0f0f0; }
+  justify-content: center;
+
+  padding: 0;
+
+  &:hover {
+    background: #f5f5f5;
+  }
 }
 
 // Chips
-.chips-wrap { display: flex; flex-wrap: wrap; gap: 3px; }
+.chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
 
 .chip {
   display: inline-block;
@@ -214,8 +254,21 @@ $gray:    #5F5E5A;
   align-items: center;
   justify-content: center;
 
-  &:hover:not(:disabled) { background: #f0f0f0; color: #222; }
-  &:disabled { color: #ccc; border-color: #eee; cursor: not-allowed; }
+  &:hover:not(:disabled) {
+    background: #f0f0f0;
+    color: #222;
+  }
+
+  &:disabled {
+    color: #ccc;
+    border-color: #eee;
+    cursor: not-allowed;
+  }
 }
 
-.loading-wrap { padding: 40px; text-align: center; color: #888; font-size: 13px; }
+.loading-wrap {
+  padding: 40px;
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+}

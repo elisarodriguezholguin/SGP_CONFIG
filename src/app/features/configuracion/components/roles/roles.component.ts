@@ -45,7 +45,6 @@ export class RolesComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  // Data de prueba — luego conectas tu API
   rolesData: Rol[] = [
     { id: 1, nombre: 'Administrador', descripcion: 'Acceso completo al sistema', modulos: ['Dashboard','Proyectos','Actividades','Seguimiento','Colaboradores','Clientes','Roles','Usuarios'] },
     { id: 2, nombre: 'Gerente', descripcion: 'Puede ver reportes y aprobar solicitudes', modulos: ['Proyectos','Actividades','Seguimiento','Clientes','Líderes'] },
@@ -64,70 +63,77 @@ export class RolesComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
- ngAfterViewInit(): void {
-  setTimeout(() => {
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-      this.paginator.page.subscribe(() => {
-        this.currentPage = this.paginator.pageIndex + 1;
-      });
-    }
-  });
-}
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+        this.paginator.page.subscribe(() => {
+          this.currentPage = this.paginator.pageIndex + 1;
+        });
+      }
+    });
+  }
 
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
-abrirDialog(rol?: Rol): void {
-  const ref = this.dialog.open(RolDialogComponent, {
-    width: '520px',
-    data: rol ? { ...rol } : null,
-  });
-  ref.afterClosed().subscribe((result) => {
-    if (result) {
-      if (rol) {
-        // Editar
-        const idx = this.dataSource.data.findIndex(r => r.id === rol.id);
-        if (idx > -1) {
-          const updated = [...this.dataSource.data];
-          updated[idx] = { ...rol, ...result };
-          this.dataSource.data = updated;
+  abrirDialog(rol?: Rol): void {
+    const ref = this.dialog.open(RolDialogComponent, {
+      width: '520px',
+      data: rol ? { ...rol } : null,
+    });
+    ref.afterClosed().subscribe((result) => {
+      if (result) {
+        if (rol) {
+          const idx = this.dataSource.data.findIndex(r => r.id === rol.id);
+          if (idx > -1) {
+            const updated = [...this.dataSource.data];
+            updated[idx] = { ...rol, ...result };
+            this.dataSource.data = updated;
+          }
+        } else {
+          const nuevo: Rol = {
+            id: this.dataSource.data.length + 1,
+            ...result
+          };
+          this.dataSource.data = [...this.dataSource.data, nuevo];
         }
-      } else {
-        // Agregar nuevo
-        const nuevo: Rol = {
-          id: this.dataSource.data.length + 1,
-          ...result
-        };
-        this.dataSource.data = [...this.dataSource.data, nuevo];
+        this.snackBar.open(
+          rol ? 'Rol actualizado' : 'Rol creado correctamente',
+          'OK', { duration: 2500 }
+        );
       }
-      this.snackBar.open(
-        rol ? 'Rol actualizado' : 'Rol creado correctamente',
-        'OK', { duration: 2500 }
-      );
+    });
+  }
+
+  // ← MÉTODO ELIMINAR AGREGADO
+  eliminar(rol: Rol): void {
+    if (confirm(`¿Eliminar el rol "${rol.nombre}"?`)) {
+      this.dataSource.data = this.dataSource.data.filter(r => r.id !== rol.id);
+      this.snackBar.open('Rol eliminado', 'OK', { duration: 2500 });
     }
-  });
-}
+  }
 
   get totalRoles(): number { return this.dataSource.data.length; }
-  
+
   getRolIcon(nombre: string): string {
-  const icons: Record<string, string> = {
-    'Administrador': 'admin_panel_settings',
-    'Gerente': 'manage_accounts',
-    'Líder': 'supervisor_account',
-    'Colaborador': 'person',
-    'Recursos Humanos': 'people',
-    'Administrativo': 'business_center',
-  };
-  return icons[nombre] || 'shield';
-}
+    const icons: Record<string, string> = {
+      'Administrador': 'admin_panel_settings',
+      'Gerente': 'manage_accounts',
+      'Líder': 'supervisor_account',
+      'Colaborador': 'person',
+      'Recursos Humanos': 'people',
+      'Administrativo': 'business_center',
+    };
+    return icons[nombre] || 'shield';
+  }
 
   chipColor(index: number): string {
     const colors = ['chip-blue','chip-green','chip-amber','chip-pink','chip-teal'];
     return colors[index % colors.length];
   }
+
   pageSize = 10;
   currentPage = 1;
 
@@ -135,27 +141,8 @@ abrirDialog(rol?: Rol): void {
     return Math.ceil(this.dataSource.filteredData.length / this.pageSize) || 1;
   }
 
-  goFirst(): void {
-    this.currentPage = 1;
-    this.dataSource.paginator!.firstPage();
-  }
-
-  goPrev(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.dataSource.paginator!.previousPage();
-    }
-  }
-
-  goNext(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.dataSource.paginator!.nextPage();
-    }
-  }
-
-  goLast(): void {
-    this.currentPage = this.totalPages;
-    this.dataSource.paginator!.lastPage();
-  }
+  goFirst(): void { this.currentPage = 1; this.dataSource.paginator!.firstPage(); }
+  goPrev(): void { if (this.currentPage > 1) { this.currentPage--; this.dataSource.paginator!.previousPage(); } }
+  goNext(): void { if (this.currentPage < this.totalPages) { this.currentPage++; this.dataSource.paginator!.nextPage(); } }
+  goLast(): void { this.currentPage = this.totalPages; this.dataSource.paginator!.lastPage(); }
 }
